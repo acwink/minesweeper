@@ -67,7 +67,7 @@ export class GamePlay {
 
   expendZero(block: BlockState) {
     block.revealed = true
-    if (block.adjacentMines)
+    if (block.adjacentMines || block.flagged)
       return
 
     this.getSiblings(block)
@@ -125,8 +125,10 @@ export class GamePlay {
 
   showAllMines() {
     this.board.flat().forEach((block) => {
-      if (block.mine)
+      if (block.mine) {
+        block.flagged = false
         block.revealed = true
+      }
     })
   }
 
