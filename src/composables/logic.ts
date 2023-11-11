@@ -83,7 +83,6 @@ export class GamePlay {
     if (block.revealed)
       return
     block.flagged = !block.flagged
-    this.checkGameState()
   }
 
   onClick(block: BlockState) {
@@ -107,7 +106,6 @@ export class GamePlay {
     }
 
     this.expendZero(block)
-    this.checkGameState()
   }
 
   getSiblings(block: BlockState) {

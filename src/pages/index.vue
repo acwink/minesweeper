@@ -2,9 +2,10 @@
 import MineBlock from '~/components/MineBlock.vue'
 import { isDev, toggleDev } from '~/composables'
 
-const play = new GamePlay(12, 12)
+const play = new GamePlay(5, 5)
 useStorage('vuesweeper', play.state)
 const state = computed(() => play.board)
+watchEffect(() => play.checkGameState())
 </script>
 
 <template>
