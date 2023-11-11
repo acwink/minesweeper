@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Block: typeof import('./src/components/MineBlock.vue')['default']
+    Confetti: typeof import('./src/components/Confetti.vue')['default']
     MineBlock: typeof import('./src/components/MineBlock.vue')['default']
     MyBlock: typeof import('./src/components/MineBlock.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

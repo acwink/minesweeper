@@ -14,7 +14,7 @@ const directions = [
 interface GameState {
   board: BlockState[][]
   mineGenerated: boolean
-  gameState: 'play' | 'won' | 'lose'
+  gameState: 'play' | 'won' | 'lost'
 }
 
 export class GamePlay {
@@ -115,8 +115,6 @@ export class GamePlay {
     }
 
     if (block.mine) {
-      this.state.value.gameState = 'lose'
-      this.showAllMines()
       setTimeout(() => {
         alert('Booom!')
       })
@@ -151,10 +149,12 @@ export class GamePlay {
   checkGameState() {
     const blocks = this.board.flat()
     if (blocks.every(block => block.revealed || block.flagged)) {
-      if (blocks.some(block => block.flagged && !block.mine)) { alert('You cheat!') }
+      if (blocks.some(block => block.flagged && !block.mine)) {
+        this.state.value.gameState = 'lost'
+        this.showAllMines()
+      }
       else {
         this.state.value.gameState = 'won'
-        alert('You win!')
       }
     }
   }

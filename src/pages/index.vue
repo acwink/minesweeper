@@ -2,7 +2,7 @@
 import MineBlock from '~/components/MineBlock.vue'
 import { isDev, toggleDev } from '~/composables'
 
-const play = new GamePlay(12, 12, 10)
+const play = new GamePlay(5, 5, 10)
 useStorage('vuesweeper', play.state)
 const state = computed(() => play.board)
 watchEffect(() => play.checkGameState())
@@ -40,5 +40,7 @@ const mineCount = computed(() => {
         REST
       </button>
     </div>
+
+    <Confetti :passed="play.state.value.gameState === 'won'" />
   </div>
 </template>
