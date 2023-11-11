@@ -2,10 +2,14 @@
 import MineBlock from '~/components/MineBlock.vue'
 import { isDev, toggleDev } from '~/composables'
 
-const play = new GamePlay(5, 5)
+const play = new GamePlay(5, 5, 10)
 useStorage('vuesweeper', play.state)
 const state = computed(() => play.board)
 watchEffect(() => play.checkGameState())
+
+const mineCount = computed(() => {
+  return play.blocks.reduce((a, b) => (b.mine ? a + 1 : a), 0)
+})
 </script>
 
 <template>
@@ -22,6 +26,10 @@ watchEffect(() => play.checkGameState())
           />
         </div>
       </div>
+    </div>
+
+    <div>
+      {{ mineCount }}
     </div>
 
     <div flex="~ gap-1" justify-center>

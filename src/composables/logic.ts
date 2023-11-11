@@ -19,12 +19,16 @@ interface GameState {
 
 export class GamePlay {
   state = ref<GameState>() as Ref<GameState>
-  constructor(public width: number, public height: number) {
+  constructor(public width: number, public height: number, public mines: number) {
     this.reset()
   }
 
   get board() {
     return this.state.value?.board
+  }
+
+  get blocks() {
+    return this.state.value.board.flat()
   }
 
   reset() {
@@ -41,14 +45,28 @@ export class GamePlay {
     }
   }
 
+  random(min: number, max: number) {
+    return Math.random() * (max - min) + min
+  }
+
+  randomInt(min: number, max: number) {
+    return Math.round(this.random(min, max))
+  }
+
   generateMines(initial: BlockState) {
-    for (const row of this.board) {
-      for (const bolck of row) {
-        if (Math.abs(initial.x - bolck.x) < 1 || Math.abs(initial.y - bolck.y) < 1)
-          continue
-        bolck.mine = Math.random() < 0.2
-      }
+    const placeRandom = () => {
+      const x = this.randomInt(0, this.width - 1)
+      const y = this.randomInt(0, this.height - 1)
+      if (Math.abs(initial.x - x) < 1 || Math.abs(initial.y - y) < 1)
+        return false
+      this.board[y][x].mine = true
+      return true
     }
+    Array
+      .from({ length: this.mines }, () => null)
+      .forEach (() => {
+        while (!placeRandom());
+      })
     this.updateNumbers()
   }
 
