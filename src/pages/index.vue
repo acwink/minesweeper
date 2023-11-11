@@ -2,7 +2,7 @@
 import MineBlock from '~/components/MineBlock.vue'
 import { isDev, toggleDev } from '~/composables'
 
-const play = new GamePlay(5, 5, 10)
+const play = new GamePlay(12, 12, 10)
 useStorage('vuesweeper', play.state)
 const state = computed(() => play.board)
 watchEffect(() => play.checkGameState())
@@ -16,8 +16,8 @@ const mineCount = computed(() => {
   <div @contextmenu.prevent>
     Minesweeper
 
-    <div p5>
-      <div v-for="row, y in state" :key="y" flex="~" items-center justify-center>
+    <div w-full overflow-auto p5>
+      <div v-for="row, y in state" :key="y" flex="~" ma w-max items-center justify-center>
         <div v-for="block, x in row" :key="x">
           <MineBlock
             :block="block"
