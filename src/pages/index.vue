@@ -1,12 +1,7 @@
 <script setup lang="ts" generic="T extends any, O extends any">
-interface BlockState {
-  x: number
-  y: number
-  revealed?: boolean
-  mine?: boolean
-  flagged?: boolean
-  adjacentMines: number
-}
+import MineBlock from '~/components/MineBlock.vue'
+import type { BlockState } from '~/types'
+import { isDev, toggleDev } from '~/composables'
 
 const WITDH = 5
 const HIGHT = 5
@@ -41,18 +36,6 @@ const directions = [
   [-1, -1],
 ]
 
-const numberColors = [
-  'text-transparent',
-  'text-blue-500',
-  'text-green-500',
-  'text-red-500',
-  'text-purple-500',
-  'text-yellow-500',
-  'text-pink-500',
-  'text-indigo-500',
-  'text-gray-500',
-]
-
 function updateNumbers() {
   state.value.forEach((row) => {
     row.forEach((block) => {
@@ -78,7 +61,6 @@ function expendZero(block: BlockState) {
 }
 
 let mineGenerated = false
-const dev = false
 
 function onRightClick(block: BlockState) {
   if (block.revealed)
@@ -103,16 +85,6 @@ function onClick(block: BlockState) {
   }
 
   expendZero(block)
-}
-
-function getBlockClass(block: BlockState) {
-  if (block.flagged)
-    return 'bg-red-500/10'
-
-  if (!block.revealed)
-    return 'bg-gray-500/10 hover:bg-gray/10'
-
-  return block.mine ? 'bg-red-500/50' : numberColors[block.adjacentMines]
 }
 
 function getSiblings(block: BlockState) {
@@ -144,31 +116,18 @@ watch(state, checkGameState, { deep: true })
 <template>
   <div @contextmenu.prevent>
     Minesweeper
-
+    <button @click="() => toggleDev()">
+      {{ isDev }}
+    </button>
     <div p5>
       <div v-for="row, y in state" :key="y" flex="~" items-center justify-center>
-        <button
-          v-for="block, x in row"
-          :key="x"
-          flex="~"
-          m="0.5"
-          h-10 w-10
-          items-center justify-center
-          border="1 gray-400/10"
-          :class="getBlockClass(block)"
-          @click="onClick(block)"
-          @contextmenu.prevent="onRightClick(block)"
-        >
-          <template v-if="block.flagged">
-            <div i-mdi-flag text-red />
-          </template>
-          <template v-if="block.revealed || dev">
-            <div v-if="block.mine" i-mdi-mine />
-            <div v-else>
-              {{ block.adjacentMines }}
-            </div>
-          </template>
-        </button>
+        <div v-for="block, x in row" :key="x">
+          <MineBlock
+            :block="block"
+            @click="onClick(block)"
+            @contextmenu.prevent="onRightClick(block)"
+          />
+        </div>
       </div>
     </div>
   </div>
