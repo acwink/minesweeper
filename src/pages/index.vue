@@ -23,10 +23,10 @@ function newGame(difficulty: 'easy' | 'medium' | 'hard') {
   }
 }
 
-const mineCount = computed(() => {
+const mineRest = computed(() => {
   if (!play.state.value.mineGenerated)
     return play.mines
-  return play.blocks.reduce((a, b) => (b.mine ? a + 1 : a), 0)
+  return play.blocks.reduce((a, b) => a + (b.mine ? 1 : 0) - (b.flagged ? 1 : 0), 0)
 })
 
 watchEffect(() => play.checkGameState())
@@ -58,7 +58,7 @@ watchEffect(() => play.checkGameState())
       </div>
       <div flex="~ gap-1" items-center text-2xl font-mono>
         <div i-mdi-mine />
-        {{ mineCount }}
+        {{ mineRest }}
       </div>
     </div>
 
@@ -73,10 +73,6 @@ watchEffect(() => play.checkGameState())
           />
         </div>
       </div>
-    </div>
-
-    <div>
-      Count: {{ mineCount }}
     </div>
 
     <div flex="~ gap-1" justify-center>
