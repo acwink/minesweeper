@@ -68,6 +68,7 @@ watchEffect(() => play.checkGameState())
           <MineBlock
             :block="block"
             @click="play.onClick(block)"
+            @dblclick="play.autoExpand(block)"
             @contextmenu.prevent="play.onRightClick(block)"
           />
         </div>

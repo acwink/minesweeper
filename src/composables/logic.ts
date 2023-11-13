@@ -125,9 +125,7 @@ export class GamePlay {
     }
 
     if (block.mine) {
-      setTimeout(() => {
-        alert('Booom!')
-      })
+      this.showAllMines()
       return
     }
 
@@ -158,6 +156,14 @@ export class GamePlay {
 
   checkGameState() {
     const blocks = this.board.flat()
+    // 如果点击了炸弹，游戏结束
+    if (blocks.some(block => block.revealed && block.mine)) {
+      this.state.value.gameState = 'lost'
+      this.showAllMines()
+      return
+    }
+
+    // 如果所有的炸弹都被标记，游戏结束
     if (blocks.every(block => block.revealed || block.flagged)) {
       if (blocks.some(block => block.flagged && !block.mine)) {
         this.state.value.gameState = 'lost'
@@ -166,6 +172,16 @@ export class GamePlay {
       else {
         this.state.value.gameState = 'won'
       }
+    }
+  }
+
+  autoExpand(block: BlockState) {
+    const siblings = this.getSiblings(block)
+    const flags = siblings.reduce((a, b) => a + (b.flagged ? 1 : 0), 0)
+    if (flags === block.adjacentMines) {
+      siblings.forEach((i) => {
+        i.revealed = true
+      })
     }
   }
 }
